@@ -2,13 +2,13 @@ require 'spec_helper'
 
 describe GenigamesConnector::BucketContentObserver do
   it 'should trigger the observer when bucket contents are created' do
-    # GenigamesConnector::BucketContentObserver.any_instance.should_receive(:after_save).once
+    GenigamesConnector::BucketContentObserver.any_instance.should_receive(:after_save).once
 
     Dataservice::BucketContent.create!(:body => "foo")
   end
 
   it 'should trigger the observer when bucket contents are saved' do
-    # GenigamesConnector::BucketContentObserver.any_instance.should_receive(:after_save).twice
+    GenigamesConnector::BucketContentObserver.any_instance.should_receive(:after_save).twice
 
     bc = Dataservice::BucketContent.create!(:body => "foo")
     bc.body = "bar"
