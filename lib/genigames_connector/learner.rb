@@ -4,8 +4,12 @@ module GenigamesConnector
       json = JSON.parse(content.body) rescue {}
       return unless json && json["task"]
       learner = content.bucket_logger.learner
+      runnable = learner.offering.runnable
+      return unless runnable.is_a?(ExternalActivity)
+      template = runnable.template
+      return if template.nil?
       json["task"].each do |task, data|
-        page = Page.find_by_name(task)
+        page = template.pages.detect{|p| p.name == task}
         score_or = page.open_responses.detect{|o| o.name == "Score" }
         completion_mc = page.multiple_choices.detect{|mc| mc.name == "Completion" }
 

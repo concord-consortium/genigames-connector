@@ -27,7 +27,7 @@ describe GenigamesConnector::Learner do
     # create the external activity
     @external_activity = ExternalActivity.create!(:name => "External Activity", :template => @activity, :user => @author)
     # create the offering, learner
-    offering = Portal::Offering.create!(:runnable => @activity)
+    offering = Portal::Offering.create!(:runnable => @external_activity)
     @learner = Portal::Learner.create!(:offering => offering)
 
     @bucket_logger = Dataservice::BucketLogger.create!(:learner => @learner)
