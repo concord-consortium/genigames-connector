@@ -10,6 +10,7 @@ module GenigamesConnector
       return if template.nil?
       json["task"].each do |task, data|
         page = template.pages.detect{|p| p.name == task}
+        next unless page
         score_or = page.open_responses.detect{|o| o.name == "Score" }
         completion_mc = page.multiple_choices.detect{|mc| mc.name == "Completion" }
 
