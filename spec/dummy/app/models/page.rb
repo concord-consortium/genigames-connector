@@ -1,5 +1,5 @@
 class Page < ActiveRecord::Base
-  attr_accessible :name, :user, :section, :page_elements
+  attr_accessible :name, :user, :section, :description, :page_elements
 
   belongs_to :user
   belongs_to :section

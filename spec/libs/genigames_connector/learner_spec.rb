@@ -1,9 +1,23 @@
 require 'spec_helper'
 
+def create_page(name, section, desc = "")
+  user = section.user
+  page = section.pages.create(:name => name, :description => desc, :user => user)
+
+  open_res = Embeddable::OpenResponse.create(:name => "Score", :prompt => "Score", :user => user)
+  page.add_embeddable(open_res)
+
+  mc = Embeddable::MultipleChoice.create(:name => "Completion", :prompt => "Completion", :user => user)
+  mc.choices.create!(:choice => "Completed")
+  page.add_embeddable(mc)
+  page.save
+end
+
 describe GenigamesConnector::Learner do
   before(:all) do
     @valid_empty = %!{"user":{"student":{"reputation":0}}}!
     @valid = %!{"user":{"student":{"reputation":50}},"task":{"Task 1":{"completed":true,"reputationEarned":35}}}!
+    @valid_hash_match = %!{"user":{"student":{"reputation":50}},"task":{"A Task Not Listed":{"completed":true,"reputationEarned":35}}}!
     @valid_updated_score = %!{"user":{"student":{"reputation":50}},"task":{"Task 1":{"completed":true,"reputationEarned":45}}}!
     @valid_rep_earned_missing = %!{"user":{"student":{"reputation":50}},"task":{"Task 1":{"completed":true}}}!
     @invalid = "This is not json"
@@ -14,15 +28,9 @@ describe GenigamesConnector::Learner do
     # create the shadow activity structure
     @activity = Activity.create!(:name => "Template", :user => @author)
     section = @activity.sections.create(:name => "Town 1", :user => @author)
-    page = section.pages.create(:name => "Task 1", :user => @author)
 
-    open_res = Embeddable::OpenResponse.create(:name => "Score", :prompt => "Score", :user => @author)
-    page.add_embeddable(open_res)
-
-    mc = Embeddable::MultipleChoice.create(:name => "Completion", :prompt => "Completion", :user => @author)
-    mc.choices.create!(:choice => "Completed")
-    page.add_embeddable(mc)
-    page.save
+    create_page("Task 1", section)
+    create_page("Nonmatch", section, "12c0d16a10ba895982908a440db4aa9f8ebe7028")
 
     # create the external activity
     @external_activity = ExternalActivity.create!(:name => "External Activity", :template => @activity, :user => @author)
@@ -67,6 +75,14 @@ describe GenigamesConnector::Learner do
       @learner.open_responses.size.should == 1
       @learner.open_responses.first.answers.size.should == 2
       @learner.open_responses.first.answer.should == "45"
+    end
+
+    it 'should match pages by the hashed name of the task' do
+      bc = Dataservice::BucketContent.create!(:body => @valid_hash_match, :bucket_logger => @bucket_logger)
+      GenigamesConnector::Learner.process_bucket_content(bc)
+
+      @learner.multiple_choices.size.should == 1
+      @learner.open_responses.size.should == 1
     end
   end
 

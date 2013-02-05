@@ -1,3 +1,5 @@
+require 'digest/sha1'
+
 module GenigamesConnector
   class Learner
     def self.process_bucket_content(content)
@@ -9,7 +11,8 @@ module GenigamesConnector
       template = runnable.template
       return if template.nil?
       json["task"].each do |task, data|
-        page = template.pages.detect{|p| p.name == task}
+        task_hash = Digest::SHA1.hexdigest(task)
+        page = template.pages.detect{|p| p.name == task || p.description == task_hash }
         next unless page
         score_or = page.open_responses.detect{|o| o.name == "Score" }
         completion_mc = page.multiple_choices.detect{|mc| mc.name == "Completion" }
