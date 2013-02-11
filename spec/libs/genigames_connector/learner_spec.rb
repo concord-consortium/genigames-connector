@@ -37,6 +37,7 @@ describe GenigamesConnector::Learner do
     # create the offering, learner
     offering = Portal::Offering.create!(:runnable => @external_activity)
     @learner = Portal::Learner.create!(:offering => offering)
+    @report_learner = Report::Learner.create!(:learner => @learner)
 
     @bucket_logger = Dataservice::BucketLogger.create!(:learner => @learner)
   end

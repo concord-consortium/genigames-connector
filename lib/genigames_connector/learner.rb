@@ -20,6 +20,9 @@ module GenigamesConnector
         process_completion(completion_mc, learner, data["completed"]) unless data["completed"].nil?
         process_score(score_or, learner, data["reputationEarned"].to_s) unless data["reputationEarned"].nil?
       end
+
+      # Finally update the Report::Learner object for reporting
+      learner.report_learner.update_fields
     end
 
     private

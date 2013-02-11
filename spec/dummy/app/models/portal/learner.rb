@@ -6,4 +6,6 @@ class Portal::Learner < ActiveRecord::Base
 
   has_many :open_responses, :class_name => "Saveable::OpenResponse"
   has_many :multiple_choices, :class_name => "Saveable::MultipleChoice"
+
+  has_one :report_learner, :class_name => "Report::Learner", :foreign_key => "learner_id"
 end
