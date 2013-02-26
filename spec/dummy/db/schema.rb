@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130211180222) do
+ActiveRecord::Schema.define(:version => 20130226172806) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -133,6 +133,14 @@ ActiveRecord::Schema.define(:version => 20130211180222) do
     t.integer  "position"
     t.datetime "created_at",         :null => false
     t.datetime "updated_at",         :null => false
+  end
+
+  create_table "saveable_multiple_choice_rationale_choices", :force => true do |t|
+    t.integer  "answer_id"
+    t.integer  "choice_id"
+    t.text     "rationale"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "saveable_multiple_choices", :force => true do |t|

@@ -38,8 +38,9 @@ module GenigamesConnector
       if completed
         saveable = ::Saveable::MultipleChoice.find_or_create_by_learner_id_and_offering_id_and_multiple_choice_id(learner.id, learner.offering.id, multiple_choice.id)
         choice = multiple_choice.choices.detect{|c| c.choice == "Completed"}
-        if saveable.answers.empty? || saveable.answers.last.choice_id != choice.id
-          saveable.answers.create(:choice => choice)
+        if saveable.answers.empty? || saveable.answers.last.rationale_choices.first.choice_id != choice.id
+          answer = saveable.answers.create()
+          answer.rationale_choices.create(:choice => choice)
         end
       end
     end

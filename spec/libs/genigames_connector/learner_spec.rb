@@ -56,7 +56,7 @@ describe GenigamesConnector::Learner do
       GenigamesConnector::Learner.process_bucket_content(bc)
 
       @learner.multiple_choices.size.should == 1
-      @learner.multiple_choices.first.answer.should == "Completed"
+      @learner.multiple_choices.first.answer.first[:answer].should == "Completed"
     end
 
     it 'should create a score saveable for completed activities' do
