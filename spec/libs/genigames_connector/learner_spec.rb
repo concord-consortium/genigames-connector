@@ -17,6 +17,7 @@ describe GenigamesConnector::Learner do
   before(:all) do
     @valid_empty = %!{"user":{"student":{"reputation":0}}}!
     @valid = %!{"user":{"student":{"reputation":50}},"task":{"Task 1":{"completed":true,"reputationEarned":35}}}!
+    @valid_with_null = %!{"user":{"student":{"reputation":50}},"task":{"Task 1":{"completed":true,"reputationEarned":null}}}!
     @valid_hash_match = %!{"user":{"student":{"reputation":50}},"task":{"A Task Not Listed":{"completed":true,"reputationEarned":35}}}!
     @valid_updated_score = %!{"user":{"student":{"reputation":50}},"task":{"Task 1":{"completed":true,"reputationEarned":45}}}!
     @valid_rep_earned_missing = %!{"user":{"student":{"reputation":50}},"task":{"Task 1":{"completed":true}}}!
@@ -103,5 +104,14 @@ describe GenigamesConnector::Learner do
       @learner.multiple_choices.size.should == 0
       @learner.open_responses.size.should == 0
     end
+
+    it 'should create a score saveable with value 0 for completed activities with null rep' do
+      bc = Dataservice::BucketContent.create!(:body => @valid_with_null, :bucket_logger => @bucket_logger)
+      GenigamesConnector::Learner.process_bucket_content(bc)
+
+      @learner.open_responses.size.should == 1
+      @learner.open_responses.first.answer.should == "0"
+    end
+
   end
 end

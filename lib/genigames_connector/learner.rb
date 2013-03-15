@@ -18,6 +18,7 @@ module GenigamesConnector
         completion_mc = page.multiple_choices.detect{|mc| mc.name == "Completion" }
 
         process_completion(completion_mc, learner, data["completed"]) unless data["completed"].nil?
+        data["reputationEarned"] = 0 if data.has_key?("reputationEarned") && data["reputationEarned"].nil?
         process_score(score_or, learner, data["reputationEarned"].to_s) unless data["reputationEarned"].nil?
       end
 
