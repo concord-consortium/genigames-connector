@@ -1,5 +1,4 @@
 class Saveable::MultipleChoiceAnswer < ActiveRecord::Base
-  attr_accessible :choice, :multiple_choice, :position
 
   belongs_to :multiple_choice, :class_name => 'Saveable::MultipleChoice', :counter_cache => :response_count
 

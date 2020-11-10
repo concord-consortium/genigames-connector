@@ -1,6 +1,4 @@
 class Page < ActiveRecord::Base
-  attr_accessible :name, :user, :section, :description, :page_elements
-
   belongs_to :user
   belongs_to :section
   has_many :page_elements, :order => :position

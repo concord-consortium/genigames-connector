@@ -1,5 +1,4 @@
 class Dataservice::BucketLogger < ActiveRecord::Base
-  attr_accessible :learner, :learner_id
 
   belongs_to :learner, :class_name => "Portal::Learner", :foreign_key => "learner_id"
   has_many :bucket_contents, :class_name => "Dataservice::BucketContent", :foreign_key => 'bucket_logger_id', :order => :updated_at

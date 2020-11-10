@@ -1,5 +1,4 @@
 class Saveable::OpenResponse < ActiveRecord::Base
-  attr_accessible :learner, :open_response
 
   belongs_to :learner, :class_name => 'Portal::Learner'
   belongs_to :offering, :class_name => 'Portal::Offering'

@@ -1,6 +1,4 @@
 class Portal::Learner < ActiveRecord::Base
-  attr_accessible :offering, :student
-
   belongs_to :offering
   belongs_to :student, :class_name => "Portal::Student"
 

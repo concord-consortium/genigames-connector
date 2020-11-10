@@ -1,6 +1,4 @@
 class Portal::Student < ActiveRecord::Base
-  attr_accessible :user
-
   belongs_to :user
 
   # this gets stubbed out in the tests... here to document what api we're using
